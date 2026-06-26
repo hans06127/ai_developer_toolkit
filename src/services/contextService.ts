@@ -4,15 +4,41 @@ import {
   type CollectPageContextMessage,
   type CollectPageContextResponse,
 } from '../types/messages';
-import type { ContextItem, PageContextPayload } from '../types/context';
+import type { ContextItem, PageContextPayload, SourceType } from '../types/context';
 import { cleanOptionalText } from '../utils/text';
+import { normalizeTags } from '../utils/tags';
 import { createId } from '../utils/id';
+
+const inferSourceType = (payload: PageContextPayload): SourceType => {
+  if (payload.sourceType) {
+    return payload.sourceType;
+  }
+
+  if (!payload.url) {
+    return 'note';
+  }
+
+  const url = payload.url.toLowerCase();
+
+  if (url.includes('docs.') || url.includes('/docs') || url.includes('documentation')) {
+    return 'documentation';
+  }
+
+  if (url.includes('github.com') && (url.includes('/issues/') || url.includes('/pull/'))) {
+    return 'issue';
+  }
+
+  return 'webpage';
+};
 
 const createContextItem = (payload: PageContextPayload): ContextItem => ({
   id: createId(),
-  title: payload.title.trim() || 'Untitled Page',
+  title: payload.title.trim() || '未命名頁面',
   url: payload.url,
   selectedText: cleanOptionalText(payload.selectedText),
+  note: cleanOptionalText(payload.note),
+  sourceType: inferSourceType(payload),
+  tags: normalizeTags(payload.tags),
   createdAt: new Date().toISOString(),
 });
 
@@ -20,7 +46,7 @@ const getActiveTabId = async (): Promise<number> => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   if (!tab?.id) {
-    throw new Error('No active tab is available.');
+    throw new Error('找不到目前分頁。');
   }
 
   return tab.id;
@@ -36,7 +62,7 @@ const collectFromTab = async (tabId: number): Promise<PageContextPayload> => {
   );
 
   if (!response?.ok || !response.data) {
-    throw new Error(response?.error ?? 'Unable to collect page context.');
+    throw new Error(response?.error ?? '無法收集頁面情境。');
   }
 
   return response.data;

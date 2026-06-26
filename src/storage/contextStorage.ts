@@ -30,9 +30,21 @@ const writeStorage = <T>(key: string, value: T): Promise<void> =>
     });
   });
 
+const migrateContextItem = (item: Partial<ContextItem>): ContextItem => ({
+  id: item.id ?? crypto.randomUUID(),
+  title: item.title ?? '未命名頁面',
+  url: item.url ?? '',
+  selectedText: item.selectedText,
+  note: item.note,
+  sourceType: item.sourceType ?? 'webpage',
+  tags: Array.isArray(item.tags) ? item.tags : [],
+  createdAt: item.createdAt ?? new Date().toISOString(),
+  updatedAt: item.updatedAt,
+});
+
 export const getContextItems = async (): Promise<ContextItem[]> => {
-  const items = await readStorage<ContextItem[]>(STORAGE_KEY);
-  return Array.isArray(items) ? items : [];
+  const items = await readStorage<Partial<ContextItem>[]>(STORAGE_KEY);
+  return Array.isArray(items) ? items.map(migrateContextItem) : [];
 };
 
 export const saveContextItems = (items: ContextItem[]): Promise<void> =>
@@ -41,6 +53,15 @@ export const saveContextItems = (items: ContextItem[]): Promise<void> =>
 export const addContextItem = async (item: ContextItem): Promise<ContextItem[]> => {
   const items = await getContextItems();
   const nextItems = [item, ...items];
+  await saveContextItems(nextItems);
+  return nextItems;
+};
+
+export const updateContextItem = async (id: string, patch: Partial<ContextItem>): Promise<ContextItem[]> => {
+  const items = await getContextItems();
+  const nextItems = items.map((item) =>
+    item.id === id ? { ...item, ...patch, updatedAt: new Date().toISOString() } : item,
+  );
   await saveContextItems(nextItems);
   return nextItems;
 };

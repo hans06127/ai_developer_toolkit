@@ -3,6 +3,7 @@ import {
   clearContextItems,
   deleteContextItem,
   getContextItems,
+  updateContextItem,
 } from '../storage/contextStorage';
 import { collectActiveTabContext } from '../services/contextService';
 import type { ContextItem } from '../types/context';
@@ -14,6 +15,7 @@ interface UseContextItemsResult {
   addCurrentPage: () => Promise<void>;
   deleteItem: (id: string) => Promise<void>;
   clearItems: () => Promise<void>;
+  updateItem: (id: string, patch: Partial<ContextItem>) => Promise<void>;
   reloadItems: () => Promise<void>;
 }
 
@@ -30,7 +32,7 @@ export const useContextItems = (): UseContextItemsResult => {
       setError(null);
       setItems(await getContextItems());
     } catch (storageError) {
-      setError(toErrorMessage(storageError, 'Unable to load saved context.'));
+      setError(toErrorMessage(storageError, '無法載入已儲存的情境。'));
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +44,7 @@ export const useContextItems = (): UseContextItemsResult => {
       const item = await collectActiveTabContext();
       setItems((currentItems) => [item, ...currentItems]);
     } catch (collectionError) {
-      setError(toErrorMessage(collectionError, 'Unable to collect the current page.'));
+      setError(toErrorMessage(collectionError, '無法收集目前頁面。'));
     }
   }, []);
 
@@ -51,7 +53,7 @@ export const useContextItems = (): UseContextItemsResult => {
       setError(null);
       setItems(await deleteContextItem(id));
     } catch (deleteError) {
-      setError(toErrorMessage(deleteError, 'Unable to delete this item.'));
+      setError(toErrorMessage(deleteError, '無法刪除此項目。'));
     }
   }, []);
 
@@ -61,7 +63,16 @@ export const useContextItems = (): UseContextItemsResult => {
       await clearContextItems();
       setItems([]);
     } catch (clearError) {
-      setError(toErrorMessage(clearError, 'Unable to clear saved context.'));
+      setError(toErrorMessage(clearError, '無法清空已儲存的情境。'));
+    }
+  }, []);
+
+  const updateItem = useCallback(async (id: string, patch: Partial<ContextItem>) => {
+    try {
+      setError(null);
+      setItems(await updateContextItem(id, patch));
+    } catch (updateError) {
+      setError(toErrorMessage(updateError, '無法更新此項目。'));
     }
   }, []);
 
@@ -76,6 +87,7 @@ export const useContextItems = (): UseContextItemsResult => {
     addCurrentPage,
     deleteItem,
     clearItems,
+    updateItem,
     reloadItems,
   };
 };
