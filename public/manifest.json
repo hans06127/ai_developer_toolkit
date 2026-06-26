@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "AI Context Collector",
+  "description": "Collect webpage context and export it as AI-ready Markdown.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "AI Context Collector",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "assets/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["assets/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["activeTab", "contextMenus", "storage"],
+  "host_permissions": ["<all_urls>"]
+}
