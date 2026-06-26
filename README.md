@@ -2,16 +2,19 @@
 
 AI Context Collector is a Chrome Extension for software engineers who need to collect webpage context and export it as clean Markdown for ChatGPT, Codex, Copilot, and other AI coding assistants.
 
-The v0.1 MVP runs entirely in the browser. It has no backend, authentication, analytics, or cloud sync.
+The v0.3.0 release runs entirely in the browser. It has no backend, authentication, analytics, AI API calls, parsers, OCR, cloud sync, or workspace management.
 
 ## Features
 
-- Collect the current page title, URL, selected text, and timestamp.
+- Collect the current page title, URL, selected text, source type, source-specific metadata, tags, notes, and timestamp.
+- Use source adapters to detect Figma, GitHub, and Swagger/OpenAPI URLs without calling external APIs.
+- Use a Traditional Chinese popup UI for daily collection and review.
+- Keep privacy-first local-only behavior with data stored in `chrome.storage.local`.
 - Add page context from the popup.
 - Add page context from the right-click context menu.
-- View collected items in a modern dark-mode popup.
+- Edit source type, tags, and notes after collection.
 - Delete one item or clear all items.
-- Export all collected sources as AI-ready Markdown.
+- Export all collected sources as structured AI-ready Markdown.
 - Copy generated Markdown to the clipboard.
 - Store all data locally with `chrome.storage.local`.
 
@@ -64,8 +67,9 @@ docs/          Architecture and roadmap documentation.
 
 ## Future Roadmap
 
-- v0.2: Better organization with tags, search, and source grouping.
-- v0.3: Import and export workflows for portable context bundles.
+- v0.2: Better organization with tags, notes, source types, Traditional Chinese UI, and improved Markdown export.
+- v0.3: Source adapter architecture with Figma, GitHub, Swagger/OpenAPI URL metadata extraction and privacy-first local-only messaging.
+- v0.4: Search, import, and export workflows for portable context bundles.
 - v1.0: A broader AI Developer Toolkit with richer source integrations.
 
 See [docs/roadmap.md](docs/roadmap.md) for details.

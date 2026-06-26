@@ -219,3 +219,90 @@ h1 {
   padding: 24px;
   text-align: center;
 }
+
+.source-pill {
+  background: #24364a;
+  border: 1px solid #36577a;
+  border-radius: 999px;
+  color: #bfe0ff;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+}
+
+.quote-preview {
+  border-left: 2px solid #f7c95c;
+  color: #d9e1ec;
+  font-size: 13px;
+  line-height: 1.45;
+  padding-left: 10px;
+  white-space: pre-wrap;
+}
+
+.card-fields {
+  border-top: 1px solid #2b323d;
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.card-fields label {
+  color: #b7c2d0;
+  display: grid;
+  font-size: 12px;
+  gap: 5px;
+}
+
+input,
+select,
+textarea {
+  background: #111820;
+  border: 1px solid #343a46;
+  border-radius: 8px;
+  color: #f4f7fb;
+  font: inherit;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+.metadata-list {
+  background: #111820;
+  border: 1px solid #2b323d;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+}
+
+.metadata-list div {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 96px 1fr;
+}
+
+.metadata-list dt {
+  color: #8f9aa8;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.metadata-list dd {
+  color: #d9e1ec;
+  font-size: 11px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.notice--privacy {
+  background: #172536;
+  border: 1px solid #315374;
+  color: #d9ecff;
+}

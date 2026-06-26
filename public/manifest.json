@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "AI Context Collector",
-  "description": "Collect webpage context and export it as AI-ready Markdown.",
-  "version": "0.1.0",
+  "name": "AI 情境收集器",
+  "description": "收集網頁情境、筆記與標籤，並匯出為適合 AI 使用的 Markdown。",
+  "version": "0.3.0",
   "action": {
-    "default_title": "AI Context Collector",
+    "default_title": "AI 情境收集器",
     "default_popup": "popup.html"
   },
   "background": {
@@ -13,11 +13,21 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["assets/content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "assets/content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["activeTab", "contextMenus", "storage"],
-  "host_permissions": ["<all_urls>"]
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
 }

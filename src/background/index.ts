@@ -9,7 +9,7 @@ const createContextMenu = (): void => {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: CONTEXT_MENU_ID,
-      title: 'Add to AI Context',
+      title: '加入 AI 情境',
       contexts: ['page', 'selection'],
     });
   });
@@ -19,7 +19,7 @@ const getPayloadFromContextMenu = (
   info: chrome.contextMenus.OnClickData,
   tab?: chrome.tabs.Tab,
 ): PageContextPayload => ({
-  title: tab?.title ?? 'Untitled Page',
+  title: tab?.title ?? '未命名頁面',
   url: info.pageUrl ?? tab?.url ?? '',
   selectedText: cleanOptionalText(info.selectionText),
 });
@@ -33,7 +33,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 
   void storePageContext(getPayloadFromContextMenu(info, tab)).catch((error) => {
-    console.error('Failed to add page to AI Context.', error);
+    console.error('無法加入 AI 情境。', error);
   });
 });
 
@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener(
       .catch((error) => {
         sendResponse({
           ok: false,
-          error: error instanceof Error ? error.message : 'Unable to store page context.',
+          error: error instanceof Error ? error.message : '無法儲存頁面情境。',
         });
       });
 
