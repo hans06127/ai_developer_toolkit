@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(
     } catch (error) {
       sendResponse({
         ok: false,
-        error: error instanceof Error ? error.message : 'Unable to collect page context.',
+        error: error instanceof Error ? error.message : '無法收集頁面情境。',
       });
     }
 
