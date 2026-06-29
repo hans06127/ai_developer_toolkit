@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AI 情境收集器",
   "description": "收集網頁情境、筆記與標籤，並匯出為適合 AI 使用的 Markdown。",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "action": {
     "default_title": "AI 情境收集器",
     "default_popup": "popup.html"

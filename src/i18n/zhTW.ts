@@ -14,6 +14,8 @@ export const zhTW = {
   tagsPlaceholder: '標籤，以逗號分隔',
   saveDetails: '儲存',
   sourceTypeLabel: '來源類型',
+  sourceAdapter: '來源 Adapter',
+  privacyLocalOnly: '隱私優先：資料只儲存在本機瀏覽器。',
   selectedText: '選取文字',
   note: '筆記',
   tags: '標籤',

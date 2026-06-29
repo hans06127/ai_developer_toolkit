@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useContextItems } from '../hooks/useContextItems';
 import { generateMarkdown } from '../services/markdownService';
 import { SOURCE_TYPES, type ContextItem, type SourceType } from '../types/context';
+import { sourceTypeLabels } from '../sourceAdapters';
 import { t } from '../i18n';
 import { formatDisplayDate } from '../utils/date';
 import { formatTags, parseTags } from '../utils/tags';
@@ -13,16 +14,6 @@ interface ToastState {
   kind: ToastKind;
   message: string;
 }
-
-const sourceTypeLabels: Record<SourceType, string> = {
-  webpage: '網頁',
-  article: '文章',
-  documentation: '文件',
-  issue: 'Issue / PR',
-  code: '程式碼',
-  note: '筆記',
-  other: '其他',
-};
 
 const showLimitedText = (value: string): string => truncateText(value, 150);
 
@@ -64,6 +55,18 @@ const ContextItemCard = ({
         </a>
       ) : null}
       <time dateTime={item.createdAt}>{formatDisplayDate(item.createdAt)}</time>
+      <dl className="metadata-list">
+        <div>
+          <dt>{t.sourceAdapter}</dt>
+          <dd>{item.sourceAdapterId}</dd>
+        </div>
+        {Object.entries(item.sourceMetadata).filter(([, value]) => value).map(([key, value]) => (
+          <div key={key}>
+            <dt>{key}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
       {item.selectedText ? <p className="quote-preview">{showLimitedText(item.selectedText)}</p> : null}
       <div className="card-fields">
         <label>
@@ -132,6 +135,8 @@ export const PopupApp = () => {
           {t.clear}
         </button>
       </section>
+
+      <div className="notice notice--privacy">{t.privacyLocalOnly}</div>
 
       {error ? <div className="notice notice--error">{error}</div> : null}
       {toast ? <div className={`notice notice--${toast.kind}`}>{toast.message}</div> : null}

@@ -4,43 +4,27 @@ import {
   type CollectPageContextMessage,
   type CollectPageContextResponse,
 } from '../types/messages';
-import type { ContextItem, PageContextPayload, SourceType } from '../types/context';
+import type { ContextItem, PageContextPayload } from '../types/context';
 import { cleanOptionalText } from '../utils/text';
-import { normalizeTags } from '../utils/tags';
+import { detectSource, mergeSourceMetadata, mergeSourceTags } from '../sourceAdapters';
 import { createId } from '../utils/id';
 
-const inferSourceType = (payload: PageContextPayload): SourceType => {
-  if (payload.sourceType) {
-    return payload.sourceType;
-  }
+const createContextItem = (payload: PageContextPayload): ContextItem => {
+  const detectedSource = detectSource(payload);
 
-  if (!payload.url) {
-    return 'note';
-  }
-
-  const url = payload.url.toLowerCase();
-
-  if (url.includes('docs.') || url.includes('/docs') || url.includes('documentation')) {
-    return 'documentation';
-  }
-
-  if (url.includes('github.com') && (url.includes('/issues/') || url.includes('/pull/'))) {
-    return 'issue';
-  }
-
-  return 'webpage';
+  return {
+    id: createId(),
+    title: payload.title.trim() || '未命名頁面',
+    url: payload.url,
+    selectedText: cleanOptionalText(payload.selectedText),
+    note: cleanOptionalText(payload.note),
+    sourceType: detectedSource.sourceType,
+    sourceAdapterId: payload.sourceAdapterId ?? detectedSource.adapterId,
+    sourceMetadata: mergeSourceMetadata(detectedSource.metadata, payload.sourceMetadata),
+    tags: mergeSourceTags(payload.tags, detectedSource.tags),
+    createdAt: new Date().toISOString(),
+  };
 };
-
-const createContextItem = (payload: PageContextPayload): ContextItem => ({
-  id: createId(),
-  title: payload.title.trim() || '未命名頁面',
-  url: payload.url,
-  selectedText: cleanOptionalText(payload.selectedText),
-  note: cleanOptionalText(payload.note),
-  sourceType: inferSourceType(payload),
-  tags: normalizeTags(payload.tags),
-  createdAt: new Date().toISOString(),
-});
 
 const getActiveTabId = async (): Promise<number> => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });

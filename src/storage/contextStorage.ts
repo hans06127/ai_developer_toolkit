@@ -37,6 +37,8 @@ const migrateContextItem = (item: Partial<ContextItem>): ContextItem => ({
   selectedText: item.selectedText,
   note: item.note,
   sourceType: item.sourceType ?? 'webpage',
+  sourceAdapterId: item.sourceAdapterId ?? 'legacy-v0.2',
+  sourceMetadata: item.sourceMetadata ?? {},
   tags: Array.isArray(item.tags) ? item.tags : [],
   createdAt: item.createdAt ?? new Date().toISOString(),
   updatedAt: item.updatedAt,
